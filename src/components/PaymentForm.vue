@@ -13,18 +13,18 @@
             <small class="error" v-if="errors.email.hasError">{{ errors.email.message }}</small>
         </div>
         <div class="payment__field">
-            <label for="cardNumber">Card Number</label>
+            <label for="cardNumber">Card Number (Numbers Only)</label>
             <input v-model="state.cardNumber" type="text" pattern="[0-9]*" inputmode="numeric">
             <small class="error" v-if="errors.cardNumber.hasError">{{ errors.cardNumber.message }}</small>
         </div>
         <div class="payment__field">
             <label for="expirationdate">Expiration (MMYY)</label>
-            <input v-model="state.expiration" type="text" pattern="[0-9]*" inputmode="numeric">
+            <input v-model="state.expiration" type="text" pattern="[0-9]*" inputmode="numeric" maxlength="4">
             <small class="error" v-if="errors.expiration.hasError">{{ errors.expiration.message }}</small>
         </div>
         <div class="payment__field">
             <label for="cvv">Security Code</label>
-            <input v-model="state.cvv" type="text" pattern="[0-9]*" inputmode="numeric">
+            <input v-model="state.cvv" type="text" pattern="[0-9]*" inputmode="numeric" maxlength="4">
             <small class="error" v-if="errors.cvv.hasError">{{ errors.cvv.message }}</small>
         </div>
       </div>
@@ -143,9 +143,11 @@ export default defineComponent({
   max-width: 32rem;
   color: #707070;
 }
+
 .payment .payment__field:first-of-type {
     grid-area: name;
 }
+
 .payment .payment__field:nth-of-type(2) {
     grid-area: email;
 }

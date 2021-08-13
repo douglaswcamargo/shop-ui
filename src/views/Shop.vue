@@ -5,29 +5,8 @@
         <h1 class="shop__header__title">Shop</h1>
       </div>
       <div class="shop__header_center">
-        <select
-          class="shop__header__filter"
-          @change="scrollToCategory"
-        >
-          <option
-            v-for="category in filteredProducts"
-            :value="category.id"
-            :key="category.id"
-          >
-            {{ category.name }}
-          </option>
-        </select>
-        <div class="shop__header__search">
-        <font-awesome-icon
-          icon="search"
-          class="fa-2x shop__header__search__icon"
-        />
-        <input
-          type="text"
-          placeholder="Search products..."
-          @keyup="handleSearch"
-        />
-      </div>
+        <FilterSelect :data="filteredProducts" :onChange="scrollToCategory" />
+        <SearchInput :onKeyUp="handleSearch" />
       </div>
       <OverlaySideMenu :count="totalItems">
         <PaymentForm
@@ -53,13 +32,15 @@
 
 <script lang="ts">
 import { defineComponent, ref, onMounted, inject } from 'vue'
+import { getProducts, postCreateOrder } from '@/services/products'
 import ProductList from '@/components/ProductList.vue'
 import Cart from '@/components/Cart.vue'
-import { SelectedProduct, Categories, PaymentInformation } from '@/types'
-import { getProducts, postCreateOrder } from '@/services/products'
 import OverlaySideMenu from '@/components/OverlaySideMenu.vue'
 import PaymentForm from '@/components/PaymentForm.vue'
+import FilterSelect from '@/components/FilterSelect.vue'
+import SearchInput from '@/components/SearchInput.vue'
 import { filterProductsByString, getOrderPayload } from '@/helpers/shopUtils'
+import { SelectedProduct, Categories, PaymentInformation } from '@/types'
 
 export default defineComponent({
   name: 'Home',
@@ -67,7 +48,9 @@ export default defineComponent({
     ProductList,
     Cart,
     OverlaySideMenu,
-    PaymentForm
+    PaymentForm,
+    FilterSelect,
+    SearchInput
   },
   setup () {
     const cart = ref<SelectedProduct[]>([])
@@ -87,9 +70,7 @@ export default defineComponent({
       }, 0)
     }
 
-    const handleSearch = (event: Event) => {
-      const e = (event?.target as HTMLInputElement)
-      const queryString: string = e.value ?? ''
+    const handleSearch = (queryString: string) => {
       const newProducts = filterProductsByString(products.value, queryString)
 
       filteredProducts.value = queryString ? newProducts : products.value
@@ -112,10 +93,8 @@ export default defineComponent({
       totalItems.value = getTotalItems()
     }
 
-    const scrollToCategory = (event: Event) => {
-      const e = (event?.target as HTMLInputElement)
-      const categoryId: string = e.value ?? ''
-      const element = document.getElementById(`category_${categoryId}`)
+    const scrollToCategory = (id: number | string) => {
+      const element = document.getElementById(`category_${id}`)
       const yOffset = -100
       const y = element ? element.getBoundingClientRect().top + window.pageYOffset + yOffset : 0
 
@@ -186,24 +165,6 @@ export default defineComponent({
     margin-right: 2rem;
   }
 
-  .shop__header__search input,
-  .shop__header__filter {
-    padding: 1rem;
-    margin-right: 2rem;
-    background-color: white;
-    border-radius: 0.5rem;
-  }
-
-  .shop__header__search {
-    display: flex;
-    align-items: center;
-  }
-
-  .shop__header__search__icon {
-    margin-right: 0.5rem;
-    color: #dcdcdc  ;
-  }
-
  .shop__body {
    display: flex;
    justify-content: center;
@@ -212,12 +173,8 @@ export default defineComponent({
  }
 
  @media screen and (max-width: 767px) {
-  .shop__header__title,
-  .shop__header__search {
+  .shop__header__title {
     display: none;
-  }
-  .shop__header__filter {
-    width: 10rem;
   }
  }
 </style>
