@@ -1,4 +1,4 @@
-import { SelectedProduct, Categories, PaymentInformation, OrderPayload } from '@/types'
+import { SelectedProduct, Categories, PaymentInformation, OrderPayload, PaymentFormError } from '@/types'
 import { CURRENCY_US, LOCALE_US } from '@/constants'
 
 export const filterProductsByString = (products: Categories[], searchString: string): Categories[] => {
@@ -38,4 +38,17 @@ export const getOrderPayload = (formValues: PaymentInformation, cart: SelectedPr
     }
   })
   return { name, email, payment: { name, card_number: cardNumber, cvv, expiration }, items }
+}
+
+export const getFormattedOrderNumber = (orderId: number): string => `#${String(orderId).padStart(6, '0')}`
+
+export const getRequiredPaymentFormValidation = (formValues: PaymentInformation) => {
+  const validatedFields = Object.keys(formValues).reduce((acc: PaymentFormError, key: string) => {
+    const hasError = formValues[key as keyof PaymentInformation] === ''
+    return { ...acc, [key]: { hasError, message: 'Required field' } }
+  }, {})
+
+  const errorArray = Object.values(validatedFields).filter((value) => value.hasError)
+
+  return { validatedFields, errorArray }
 }

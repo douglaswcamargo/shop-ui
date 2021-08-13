@@ -34,11 +34,11 @@ export default defineComponent({
 </script>
 
 <style scoped>
-  .cart-button[data-count]{
-      position: relative;
-      color: #475569
+  .cart-button[data-count] {
+    position: relative;
+    color: #475569
   }
-  .cart-button.hasBadge[data-count]:after{
+  .cart-button.hasBadge[data-count]:after {
     position: absolute;
     right: -0.75em;
     top: -.75em;

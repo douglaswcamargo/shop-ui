@@ -36,20 +36,26 @@
         Confirm order
       </button>
     </form>
-  <div class="payment__success" v-if="isSuccess">SUCCESS!</div>
+  <div class="payment__success" v-if="isSuccess">
+    <p class="payment__success__order">
+      {{ `Order ${formattedOrderId}`}}
+    </p>
+    <p class="payment__success__message">Thank you!</p>
+  </div>
   <button
     class="cart__button return"
     v-if="isSubmitSuccess"
     @click="reloadPage"
   >
-    Return to shop'
+    Return to shop
   </button>
 </div>
 </template>
 
 <script lang="ts">
 import { defineComponent, ref, watch } from 'vue'
-import { PaymentInformation } from '@/types'
+import { PaymentFormError } from '@/types'
+import { getFormattedOrderNumber, getRequiredPaymentFormValidation } from '@/helpers/shopUtils'
 
 export default defineComponent({
   name: 'PaymentForm',
@@ -61,10 +67,15 @@ export default defineComponent({
     isSubmitSuccess: {
       type: Boolean,
       default: false
+    },
+    orderId: {
+      type: Number,
+      default: 0
     }
   },
   setup (props) {
     const isSuccess = ref(props.isSubmitSuccess)
+    const formattedOrderId = ref('')
     const state = ref({
       name: '',
       email: '',
@@ -73,7 +84,7 @@ export default defineComponent({
       expiration: ''
     })
 
-    const errors = ref({
+    const errors = ref<PaymentFormError>({
       name: { hasError: false, message: '' },
       email: { hasError: false, message: '' },
       cardNumber: { hasError: false, message: '' },
@@ -81,14 +92,11 @@ export default defineComponent({
       expiration: { hasError: false, message: '' }
     })
 
-    const handleSubmit = (event: Event) => {
-      const validationErrors = Object.keys(state.value).reduce((acc: any, key) => {
-        const hasError = state.value[key as keyof PaymentInformation] === ''
-        return { ...acc, [key]: { hasError, message: 'Required field' } }
-      }, {})
-      errors.value = validationErrors
-      const errorCount = Object.values(validationErrors).filter((value: any) => value.hasError)
-      if (errorCount.length === 0) {
+    const handleSubmit = () => {
+      const { validatedFields, errorArray } = getRequiredPaymentFormValidation(state.value)
+
+      errors.value = validatedFields
+      if (errorArray.length === 0) {
         props.onSubmit(state.value)
       }
     }
@@ -97,11 +105,15 @@ export default defineComponent({
       isSuccess.value = newValue
     })
 
+    watch(() => props.orderId, (newValue: number) => {
+      formattedOrderId.value = getFormattedOrderNumber(newValue)
+    })
+
     const reloadPage = () => {
       window.location.reload()
     }
 
-    return { handleSubmit, errors, state, isSuccess, reloadPage }
+    return { handleSubmit, errors, state, isSuccess, reloadPage, formattedOrderId }
   }
 })
 </script>
@@ -194,11 +206,17 @@ export default defineComponent({
 .payment__success {
   width: 32rem;
   height: 18rem;
-  color: green;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  font-size: 3rem;
+}
+.payment__success__order {
+  font-size: 2rem;
+}
+.payment__success__message {
+  margin-top: 2rem;
+  font-size: 1.5rem;
 }
 
 </style>

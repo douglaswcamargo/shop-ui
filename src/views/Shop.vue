@@ -34,6 +34,7 @@
           v-if="totalItems > 0"
           :onSubmit="handleSubmit"
           :isSubmitSuccess="isSubmitSuccess"
+          :orderId="orderCreatedId"
         />
         <Cart
           v-if="!isSubmitSuccess"
@@ -51,7 +52,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, onMounted } from 'vue'
+import { defineComponent, ref, onMounted, inject } from 'vue'
 import ProductList from '@/components/ProductList.vue'
 import Cart from '@/components/Cart.vue'
 import { SelectedProduct, Categories, PaymentInformation } from '@/types'
@@ -75,6 +76,9 @@ export default defineComponent({
     const displayCart = ref<boolean>(false)
     const totalItems = ref<number>(0)
     const isSubmitSuccess = ref<boolean>(false)
+    /* eslint-disable-next-line */
+    const toast: any = inject('$toast')
+    const orderCreatedId = ref(0)
 
     const getTotalItems = () => {
       return cart.value.reduce((acc, item) => {
@@ -99,7 +103,7 @@ export default defineComponent({
         products.value = data
         filteredProducts.value = data
       } catch (error) {
-        console.log(error)
+        toast.error(error.message)
       }
     })
 
@@ -121,11 +125,14 @@ export default defineComponent({
     const handleSubmit = async (values: PaymentInformation) => {
       try {
         const orderPayload = getOrderPayload(values, cart.value)
-        const response = await postCreateOrder(orderPayload)
-        console.log(response)
+        const orderResponse = await postCreateOrder(orderPayload)
+        const { id } = orderResponse.data
+
+        toast.success('Order created.')
         isSubmitSuccess.value = true
+        orderCreatedId.value = id
       } catch (error) {
-        console.log(error)
+        toast.error(error.message)
       }
     }
 
@@ -138,6 +145,7 @@ export default defineComponent({
       totalItems,
       handleSubmit,
       handleSearch,
+      orderCreatedId,
       products,
       scrollToCategory
     }

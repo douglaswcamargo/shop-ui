@@ -40,3 +40,7 @@ export interface OrderPayload {
   }
   items: { item_id: number; total: number; }[]
 }
+
+export interface PaymentFormError {
+  [key: string]: { hasError: boolean, message: string }
+}
