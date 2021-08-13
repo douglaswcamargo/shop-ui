@@ -33,35 +33,36 @@
 <script lang="ts">
 import { defineComponent, ref, onMounted, inject } from 'vue'
 import { getProducts, postCreateOrder } from '@/services/products'
-import ProductList from '@/components/ProductList.vue'
-import Cart from '@/components/Cart.vue'
-import OverlaySideMenu from '@/components/OverlaySideMenu.vue'
-import PaymentForm from '@/components/PaymentForm.vue'
-import FilterSelect from '@/components/FilterSelect.vue'
-import SearchInput from '@/components/SearchInput.vue'
 import { filterProductsByString, getOrderPayload } from '@/helpers/shopUtils'
 import { SelectedProduct, Categories, PaymentInformation } from '@/types'
+
+import Cart from '@/components/Cart.vue'
+import FilterSelect from '@/components/FilterSelect.vue'
+import ProductList from '@/components/ProductList.vue'
+import OverlaySideMenu from '@/components/OverlaySideMenu.vue'
+import PaymentForm from '@/components/PaymentForm.vue'
+import SearchInput from '@/components/SearchInput.vue'
 
 export default defineComponent({
   name: 'Home',
   components: {
-    ProductList,
     Cart,
+    FilterSelect,
     OverlaySideMenu,
     PaymentForm,
-    FilterSelect,
+    ProductList,
     SearchInput
   },
   setup () {
     const cart = ref<SelectedProduct[]>([])
-    const products = ref<Categories[]>([])
-    const filteredProducts = ref<Categories[]>([])
     const displayCart = ref<boolean>(false)
-    const totalItems = ref<number>(0)
+    const filteredProducts = ref<Categories[]>([])
     const isSubmitSuccess = ref<boolean>(false)
+    const orderCreatedId = ref(0)
+    const products = ref<Categories[]>([])
+    const totalItems = ref<number>(0)
     /* eslint-disable-next-line */
     const toast: any = inject('$toast')
-    const orderCreatedId = ref(0)
 
     const getTotalItems = () => {
       return cart.value.reduce((acc, item) => {
@@ -121,12 +122,12 @@ export default defineComponent({
       filteredProducts,
       handleCartChange,
       isSubmitSuccess,
-      totalItems,
       handleSubmit,
       handleSearch,
       orderCreatedId,
       products,
-      scrollToCategory
+      scrollToCategory,
+      totalItems
     }
   }
 })

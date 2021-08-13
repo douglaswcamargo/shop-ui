@@ -32,8 +32,8 @@
 
 <script lang="ts">
 import { computed, defineComponent, PropType } from 'vue'
-import { SelectedProduct } from '@/types'
 import { getFormattedPrice } from '@/helpers/shopUtils'
+import { SelectedProduct } from '@/types'
 
 export default defineComponent({
   name: 'Cart',

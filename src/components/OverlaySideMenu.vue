@@ -40,53 +40,53 @@ export default defineComponent({
 })
 </script>
 <style scoped>
-.overlay {
-  height: 100%;
-  width: 100%;
-  position: fixed;
-  z-index: 1;
-  top: 0;
-  right: 0;
-  background-color: white;
-  overflow-x: hidden;
-  opacity: 1
-}
+  .overlay {
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    right: 0;
+    background-color: white;
+    overflow-x: hidden;
+    opacity: 1
+  }
 
-.slide-enter-active,
-.slide-leave-active {
-  transition: width 0.3s ease;
-  transition: opacity 0.2s ease;
-}
+  .slide-enter-active,
+  .slide-leave-active {
+    transition: width 0.3s ease;
+    transition: opacity 0.2s ease;
+  }
 
-.slide-enter-from,
-.slide-leave-to {
-  width: 0;
-  opacity: 0;
-}
+  .slide-enter-from,
+  .slide-leave-to {
+    width: 0;
+    opacity: 0;
+  }
 
-.overlay__content {
-  top: 10%;
-  width: 100%;
-  margin-top: 30px;
-  display: flex;
-  justify-content: center;
-  /* align-items: center; */
-  height: 500px;
-  flex-wrap: wrap;
-}
+  .overlay__content {
+    top: 10%;
+    width: 100%;
+    margin-top: 30px;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    height: 500px;
+    flex-wrap: wrap;
+  }
 
-.overlay a {
-  padding: 8px;
-  text-decoration: none;
-  font-size: 36px;
-  color: #818181;
-  display: block;
-}
+  .overlay a {
+    padding: 8px;
+    text-decoration: none;
+    font-size: 36px;
+    color: #818181;
+    display: block;
+  }
 
-.overlay__closebtn {
-  position: absolute;
-  top: 0;
-  right: 45px;
-  font-size: 60px;
-}
+  .overlay__closebtn {
+    position: absolute;
+    top: 0;
+    right: 45px;
+    font-size: 60px;
+  }
 </style>

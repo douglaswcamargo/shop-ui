@@ -31,8 +31,9 @@
 
 <script lang="ts">
 import { defineComponent, computed, ref, PropType } from 'vue'
-import ProductCard from '@/components/ProductCard.vue'
 import { SelectedProduct, Categories } from '@/types'
+
+import ProductCard from '@/components/ProductCard.vue'
 
 export default defineComponent({
   name: 'ProductList',

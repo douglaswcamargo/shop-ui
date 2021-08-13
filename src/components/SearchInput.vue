@@ -18,10 +18,6 @@ import { defineComponent } from 'vue'
 export default defineComponent({
   name: 'SearchInput',
   props: {
-    data: {
-      type: Object,
-      required: true
-    },
     placeHolder: {
       type: String,
       default: 'Search products...'
