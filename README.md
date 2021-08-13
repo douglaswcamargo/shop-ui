@@ -1,5 +1,14 @@
 # shop-ui
 
+This app requires the api to be running on `http://localhost:3333`, if you wish to change the default endpoint, simply add a definition in a `.env` file, like this:
+
+`/.env`
+```
+VUE_APP_API_URL=http://localhost:3333
+```
+
+To run the API, download [this repo](https://github.com/douglaswcamargo/shop-api) and follow the instructions in its `README.md` file.
+
 ## Project setup
 ```
 npm install
@@ -14,16 +23,3 @@ npm run serve
 ```
 npm run build
 ```
-
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).

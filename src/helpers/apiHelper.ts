@@ -1,7 +1,7 @@
 import axios from 'axios'
 
-const BASE_URL = 'http://localhost:3333'
+const baseURL = process.env.VUE_APP_API_URL ?? 'http://localhost:3333'
 
 export const axiosInstance = axios.create({
-  baseURL: BASE_URL
+  baseURL
 })
